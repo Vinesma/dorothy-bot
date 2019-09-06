@@ -21,7 +21,7 @@ dorothyBot.on('message', message => {
   // If the message is "ping"
   if (message.content.toLowerCase() === '!ping') {
     // Send "pong" to the same channel
-    message.channel.send('Pong');
+    message.channel.send('Pong!');
   }
 });
 
