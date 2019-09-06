@@ -4,7 +4,8 @@
   "description": "Discord bot by u/Vinesma",
   "main": "main.js",
   "scripts": {
-    "test": "node main"
+    "test": "node main",
+    "start": "node main"
   },
   "author": "Vinesma",
   "license": "ISC",
