@@ -1,0 +1,14 @@
+{
+  "name": "dorothybot",
+  "version": "1.0.0",
+  "description": "Discord bot by u/Vinesma",
+  "main": "main.js",
+  "scripts": {
+    "test": "node main"
+  },
+  "author": "Vinesma",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.5.1"
+  }
+}
