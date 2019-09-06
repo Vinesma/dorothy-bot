@@ -21,9 +21,9 @@ dorothyBot.on('message', message => {
   // If the message is "ping"
   if (message.content.toLowerCase() === '!ping') {
     // Send "pong" to the same channel
-    message.channel.send('pong');
+    message.channel.send('Pong');
   }
 });
 
 // Log our bot in using the token from https://discordapp.com/developers/applications/me
-dorothyBot.login('NjE5NjQwNzQzMzQ2MDQ0OTU2.XXLRXg.bPIH-LjLHA1PfEAk7Cxr0yMfC9k');
+dorothyBot.login(process.env.BOT_TOKEN);
