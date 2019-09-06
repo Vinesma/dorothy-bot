@@ -1,29 +1,32 @@
-/**
- * A ping pong bot, whenever you send "ping", it replies "pong".
- */
+const Discord = require('discord.js'); //Using discord.js
+const Commands = require('./commands/commands.js'); // command list
 
-// Import the discord.js module
-const Discord = require('discord.js');
-
-// Create an instance of a Discord client
+// Instance a Discord client
 const dorothyBot = new Discord.Client();
 
-/**
- * The ready event is vital, it means that only _after_ this will your bot start reacting to information
- * received from Discord
- */
+// Ready event, fires when the bot is ready
 dorothyBot.on('ready', () => {
-  console.log('I am ready!');
+  console.log('FINALLY THE DOROTHY RETURNS TO DISCORD!');
 });
 
 // Create an event listener for messages
 dorothyBot.on('message', message => {
-  // If the message is "ping"
-  if (message.content.toLowerCase() === '!ping') {
-    // Send "pong" to the same channel
-    message.channel.send('Pong!');
-  }
+    //Check if the message is a command
+    if (message.content.startsWith('!')) {
+        cmd = message.content.substr(1);
+
+        switch (cmd.toLowerCase()) {
+            case 'ping':
+                Commands.ping(message);
+                break;
+            case 'help':
+            default:
+                Commands.help(message);
+                break;
+        }
+    }
 });
 
-// Log our bot in using the token from https://discordapp.com/developers/applications/me
+// Bot login
 dorothyBot.login(process.env.BOT_TOKEN);
+//REMEMBER TO REMOVE THE TOKEN AND SET heroku scale worker=1 before deploy
