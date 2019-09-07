@@ -39,5 +39,5 @@ dorothyBot.on('message', message => {
 dorothyBot.login(process.env.BOT_TOKEN);
 
 // FOR DEV TESTING CHECKOUT test-branch AND RUN heroku scale worker=0 | heroku local
-// REMOVE THE TOKEN before commits
-// SET heroku scale worker=1 before deploy
+// REMOVE THE TOKENS before commits
+// SET heroku scale worker=1 after deploy

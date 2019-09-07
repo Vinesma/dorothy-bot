@@ -1,5 +1,5 @@
 // Youtube vars
-const requests = 3; // How many requests?
+const requests = 3; // How many requests to return?
 const ytTOKEN = process.env.YT_TOKEN // Set TOKEN
 
 exports.isCheckingYT = false;

@@ -18,7 +18,7 @@ exports.ping = (msg) => { //ping command
     msg.channel.send('Pong!');
 }
 
-exports.youtube = (msg) => {
+exports.youtube = (msg) => { //youtube command
     Config.isCheckingYT = !Config.isCheckingYT;
 
     fetch(Config.ytAPI_LINK)

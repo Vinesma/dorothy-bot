@@ -5,9 +5,9 @@ class Video{
         this.ytLink = ytLink;
     }
 
-    format(){
+    format(){ 
         return `${this.title}\n${this.ytLink}${this.id}`;
-    }
+    } //formats data into a discord friendly string
 }
 
 module.exports = Video;
