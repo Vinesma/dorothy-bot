@@ -16,14 +16,15 @@ dorothyBot.on('message', message => {
 
     // Check if the message is a command
     if (message.content.startsWith('!')) {
-        cmd = message.content.substr(1); // Remove '!'
+        let cmd = message.content.substr(1); // Remove '!'
         
         switch (cmd.toLowerCase()) {
             case 'ping':
                 Commands.ping(message);
                 break;
-            case 'youtube':
-                //WIP
+            case 'youtube':                
+                Commands.youtube(message);
+                Commands.cleanUp(message);
                 break;
             case 'help':
             default:
@@ -36,4 +37,7 @@ dorothyBot.on('message', message => {
 
 // Bot login
 dorothyBot.login(process.env.BOT_TOKEN);
-//REMEMBER TO REMOVE THE TOKEN AND SET heroku scale worker=1 before deploy
+
+// FOR DEV TESTING CHECKOUT test-branch AND RUN heroku scale worker=0 | heroku local
+// REMOVE THE TOKEN before commits
+// SET heroku scale worker=1 before deploy
