@@ -3,10 +3,18 @@ commandList =
 !ping > Returns 'Pong!'
 !help > Returns this help message.`
 
+exports.help = (msg) => { //command list
+    msg.channel.send(commandList);
+}
+
 exports.ping = (msg) => { //ping command
     msg.channel.send('Pong!');
 }
 
-exports.help = (msg) => { //command list
-    msg.channel.send(commandList);
+exports.youtube = (msg) => {
+    //WIP
+}
+
+exports.cleanUp = (msg) => { //deletes a message
+    msg.delete();
 }
