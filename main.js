@@ -22,7 +22,7 @@ dorothyBot.on('message', message => {
             case 'ping':
                 Commands.ping(message);
                 break;
-            case 'youtube':                
+            case 'youtube':
                 Commands.youtube(message);
                 Commands.cleanUp(message);
                 break;
