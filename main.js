@@ -26,6 +26,10 @@ dorothyBot.on('message', message => {
                 Commands.youtube(message);
                 Commands.cleanUp(message);
                 break;
+            case 'danbooru':
+                // Commands.danbooru(message);
+                Commands.cleanUp(message);
+                break;
             case 'help':
             default:
                 Commands.help(message);

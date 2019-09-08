@@ -6,7 +6,8 @@ const fs = require('fs');
 const commandList =
 `List of valid commands:
 !ping > Returns 'Pong!'
-!youtube > Turns youtube checking on
+!youtube > Turns youtube checking on/off
+!status > Returns the current status of bot activities
 !help > Returns this help message.`
 
 let videoList = [];
@@ -24,6 +25,7 @@ exports.youtube = (msg) => { //youtube command
     if (Config.isCheckingYT === false) {
         msg.channel.send('I guess I can get those videos for you...');
         Config.timer = setInterval(() => {
+            Config.ytDate = new Date();
             fetchVideos(msg);
         }, Config.intervalYT);
         Config.isCheckingYT = !Config.isCheckingYT;
@@ -34,59 +36,21 @@ exports.youtube = (msg) => { //youtube command
     }
 }
 
-exports.cleanUp = (msg) => { //deletes a message
-    msg.delete();
-}
-
-function filterVideos(a1){
-    let tempArray = [];
-
-    a1.forEach(video => {
-        for (let i = 0; i < Config.filterList.length; i++) {
-            if (video.title.toLowerCase().includes(Config.filterList[i])) {
-                tempArray.push(video);
-                continue;
-            }
-        }
-    });
-
-    return tempArray;
-}
-
-function recentVideos(a1, a2){
-    let tempArray = [];
-    let notRecent = false;
-    
-    a1.forEach(video => {
-        for (let i = 0; i < a2.length; i++) {
-            if (video.id === a2[i]) {
-                notRecent = true;
-                continue;
-            } 
-        }
-        if (!notRecent) {
-            tempArray.push(video);
-        }
-        notRecent = false;
-    });
-
-    return tempArray;
-}
-
 function fetchVideos(msg){
     fetch(Config.ytAPI_LINK)
         .then(res => res.json())
         .then(data => {
             data.items.forEach(video => { // List all videos
-                let v = new Video(video.snippet.title, video.contentDetails.upload.videoId, Config.ytLink);
+                let datePosted = new Date(video.snippet.publishedAt);
+                let v = new Video(video.snippet.title, video.contentDetails.upload.videoId, datePosted, Config.ytLink);
                 videoList.push(v);
             });                       
 
-            let ftVideos = filterVideos(videoList); // Filter videos by interests
+            let ftVideos = Config.filterVideos(videoList, Config.filterList); // Filter videos by interests
             fs.readFile('./storage/videoList.json', (err, jsonData) => { // Read data from the previous fetch
                 if (!err){
                     oldVideoList = JSON.parse(jsonData);
-                    ftVideos = recentVideos(ftVideos, oldVideoList);
+                    ftVideos = Config.recentVideos(ftVideos, oldVideoList);
                 } else {
                     console.log(`Error reading data: ${err}`);
                 }
@@ -103,4 +67,8 @@ function fetchVideos(msg){
                 fs.writeFile('./storage/videoList.json', JSON.stringify(idList), (err) => console.log(err !== null ? 'File write error: '+err : 'Write successful'));
             });
         });
+}
+
+exports.cleanUp = (msg) => { //deletes a message
+    msg.delete();
 }

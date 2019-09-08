@@ -1,7 +1,8 @@
 class Video{
-    constructor(title, id, ytLink){
+    constructor(title, id, datePosted ,ytLink){
         this.title = title;
         this.id = id;
+        this.datePosted = datePosted;
         this.ytLink = ytLink;
     }
 
