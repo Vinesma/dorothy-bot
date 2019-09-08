@@ -27,7 +27,7 @@ dorothyBot.on('message', message => {
                 Commands.cleanUp(message);
                 break;
             case 'danbooru':
-                // Commands.danbooru(message);
+                Commands.danbooru(message);
                 Commands.cleanUp(message);
                 break;
             case 'help':
