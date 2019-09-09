@@ -14,7 +14,7 @@ exports.ytAPI_LINK = `https://www.googleapis.com/youtube/v3/activities?part=snip
 // Danbooru vars
 const dbRequests = 20; // How many requests to return?
 
-exports.filterListDB = ['4koma'];
+exports.filterListDB = ['4koma', 'comic'];
 exports.isCheckingDB = false;
 exports.timerDB = undefined;
 exports.intervalDB = 3600000 * 5;
