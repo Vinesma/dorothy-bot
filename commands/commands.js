@@ -11,8 +11,8 @@ const commandList =
 !status > Returns the current status of bot activities
 !help > Returns this help message.`;
 
-let curDateYT = new Date().getTime(); // Time of deployment
-let curDateDB = new Date().getTime();
+let curDateYT = new Date().getTime() - Config.intervalYT; // Time of deployment
+let curDateDB = new Date().getTime() - Config.intervalDB;
 
 exports.help = (msg) => { //command list
     msg.channel.send(commandList);
@@ -25,6 +25,7 @@ exports.ping = (msg) => { //ping command
 exports.youtube = (msg) => { //youtube command
     if (Config.isCheckingYT === false) {
         msg.channel.send('I guess I can get those videos for you...');
+        fetchVideos(msg);
         Config.timer = setInterval(() => {
             fetchVideos(msg);
         }, Config.intervalYT);
@@ -39,6 +40,7 @@ exports.youtube = (msg) => { //youtube command
 exports.danbooru = (msg) => { //danbooru command
     if (Config.isCheckingDB === false) {
         msg.channel.send('Okay, I will observe danbooru for you...');
+        fetchDB(msg);
         Config.timerDB = setInterval(() => {
             fetchDB(msg);
         }, Config.intervalDB);
@@ -61,20 +63,24 @@ function fetchVideos(msg){
         .then(res => res.json())
         .then(data => {
             let videoList = [];
-
-            data.items.forEach(video => { // List all videos
+            // List all videos
+            data.items.forEach(video => {
                 let datePosted = new Date(video.snippet.publishedAt).getTime();
                 let v = new Video(video.contentDetails.upload.videoId, video.snippet.title, datePosted, Config.ytLink);
                 videoList.push(v);
             });
-            let ftVideos = Config.filterVideos(videoList, Config.filterList); // Filter videos by interests
-
-            ftVideos = Config.recentElem(ftVideos, curDateYT);
+            // Filter videos by interests
+            let ftVideos = videoList.filter(e => Config.filterPositive(e.title, Config.filterList));
+            // Check recency
+            ftVideos = ftVideos.filter(e => Config.checkRecent(e.datePosted, curDateYT));
+            // Send videos out
             if (ftVideos.length === 0) {
                 console.log("No new videos found...");
             } else {
                 ftVideos.forEach(video => { msg.channel.send(video.format()); }); // Send a msg with the videos
+                console.log(`Found and posted ${ftVideos.length} videos`);
             }
+            // Get new time
             curDateYT = new Date().getTime();
         });
 }
@@ -84,21 +90,24 @@ function fetchDB(msg){
         .then(res => res.json())
         .then(data => {
             let dbPostList = [];
-
-            data.forEach(post => { // List all posts
+            // List all posts
+            data.forEach(post => {
                 let datePosted = new Date(post.created_at).getTime();
                 let p = new booruImg(post.id, datePosted, Config.dbLink, post.is_pending, post.is_flagged, post.tag_string_general, post.tag_string_character);
                 dbPostList.push(p);
             });
-
-            let ftPosts = Config.filterPosts(dbPostList, Config.filterListDB); // Filter posts out by tags
-
-            ftPosts = Config.recentElem(ftPosts, curDateDB);
+            // Filter posts out by tags
+            let ftPosts = dbPostList.filter(e => Config.filterNegative(e.tag_string, Config.filterListDB));
+            // Check recency 
+            ftPosts = ftPosts.filter(e => Config.checkRecent(e.datePosted, curDateDB));
+            // Send posts out
             if (ftPosts.length === 0) {
                 console.log("No new booru posts found...");
             } else {
                 ftPosts.forEach(post => { msg.channel.send(post.format()); }); // Send a msg with the posts
+                console.log(`Found and posted ${ftPosts.length} posts`);
             }
+            // Get new time
             curDateDB = new Date().getTime();
         });
-} 
+}
