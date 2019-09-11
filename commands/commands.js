@@ -77,6 +77,7 @@ function fetchVideos(msg){
             if (ftVideos.length === 0) {
                 console.log("No new videos found...");
             } else {
+                msg.channel.send("@Vinesma"); // Tag me
                 ftVideos.forEach(video => { msg.channel.send(video.format()); }); // Send a msg with the videos
                 console.log(`Found and posted ${ftVideos.length} videos`);
             }

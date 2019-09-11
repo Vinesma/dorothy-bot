@@ -6,13 +6,15 @@
   "scripts": {
     "start": "node main",
     "dev": "npm run git:check-test && npm run heroku:scaled && npm run heroku:config",
-    "deploy": "npm run git:push-branch && npm run git:check-master && npm run git:merge-test && npm run git:push-branch && npm run heroku:scaleu",
+    "deploy": "npm run git:check-test && npm run git:push-branch && npm run git:check-master && npm run git:merge-test && npm run git:push-branch && npm run heroku:scaleu && npm run heroku:logst",
     "git:check-test": "git checkout test-branch",
     "git:check-master": "git checkout master",
     "git:push-branch": "git push",
     "git:merge-test": "git merge test-branch",
     "heroku:scaled": "heroku scale worker=0",
     "heroku:scaleu": "heroku scale worker=1",
+    "heroku:logst": "heroku logs --tail",
+    "heroku:logs": "heroku logs",
     "heroku:config": "heroku config"
   },
   "author": "Vinesma",
