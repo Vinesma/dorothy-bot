@@ -1,5 +1,5 @@
-const Discord = require('discord.js'); //Using discord.js
-const Commands = require('./commands/commands.js'); // command list
+const Discord = require('discord.js');
+const Commands = require('./commands/commands.js');
 
 // Instance a Discord client
 const dorothyBot = new Discord.Client();
@@ -11,14 +11,13 @@ dorothyBot.on('ready', () => {
 
 // Create an event listener for messages
 dorothyBot.on('message', message => {
-    // Prevents msg loops
-    if (message.author.id === dorothyBot.id) return;
-
-    // Check if the message is a command
-    if (message.content.startsWith('!')) {
-        let cmd = message.content.substr(1); // Remove '!'
-        
-        switch (cmd.toLowerCase()) {
+    // Check if the message is a command and not sent by a bot
+    if (message.content.startsWith('!') && !message.author.bot) {
+        // Remove '!' and split the arguments
+        const args = message.content.substr(1).split(/ +/);
+        // Shift the first item of args (the command) into cmd
+        const cmd = args.shift().toLowerCase();
+        switch (cmd) {
             case 'ping':
                 Commands.ping(message);
                 break;
@@ -29,6 +28,9 @@ dorothyBot.on('message', message => {
             case 'danbooru':
                 Commands.danbooru(message);
                 Commands.cleanUp(message);
+                break;
+            case 'clean':
+                Commands.cleanUpBulk(message, args);
                 break;
             case 'help':
             default:
@@ -42,6 +44,6 @@ dorothyBot.on('message', message => {
 // Bot login
 dorothyBot.login(process.env.BOT_TOKEN);
 
-// FOR DEV TESTING CHECKOUT test-branch AND RUN heroku scale worker=0 | heroku local
+// FOR DEVELOPMENT npm run dev AND heroku run local
 // REMOVE THE TOKENS before commits
 // SET heroku scale worker=1 after deploy
