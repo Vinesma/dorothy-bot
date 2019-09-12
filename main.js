@@ -1,8 +1,17 @@
 const Discord = require('discord.js');
-const Commands = require('./commands/commands.js');
+const fs = require('fs');
 
 // Instance a Discord client
 const dorothyBot = new Discord.Client();
+// Retrieve the supported commands
+dorothyBot.commands = new Discord.Collection();
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    dorothyBot.commands.set(command.name, command);
+}
 
 // Ready event, fires when the bot is ready
 dorothyBot.on('ready', () => {
@@ -15,28 +24,17 @@ dorothyBot.on('message', message => {
     if (message.content.startsWith('!') && !message.author.bot) {
         // Remove '!' and split the arguments
         const args = message.content.substr(1).split(/ +/);
-        // Shift the first item of args (the command) into cmd
-        const cmd = args.shift().toLowerCase();
-        switch (cmd) {
-            case 'ping':
-                Commands.ping(message);
-                break;
-            case 'youtube':
-                Commands.youtube(message);
-                Commands.cleanUp(message);
-                break;
-            case 'danbooru':
-                Commands.danbooru(message);
-                Commands.cleanUp(message);
-                break;
-            case 'clean':
-                Commands.cleanUpBulk(message, args);
-                break;
-            case 'help':
-            default:
-                Commands.help(message);
-                Commands.cleanUp(message);
-                break;
+        // Shift the first item of args (the command) into commandName
+        const commandName = args.shift().toLowerCase();
+        // Dynamically check if the command exists
+        if(!dorothyBot.commands.has(commandName)) return;
+
+        try {
+            dorothyBot.commands.get(commandName).execute(message, args);
+        }
+        catch (error) {
+            console.error(error);
+            message.channel.send('There was an error executing that command!');
         }
     }
 });

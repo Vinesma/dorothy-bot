@@ -1,5 +1,5 @@
-class booruImg{
-    constructor(id, datePosted, link, isPending, isFlagged, tag_string, tag_string_chars){
+class booruImg {
+    constructor(id, datePosted, link, isPending, isFlagged, tag_string, tag_string_chars) {
         this.id = id;
         this.datePosted = datePosted;
         this.link = link;
@@ -9,11 +9,11 @@ class booruImg{
         this.tag_string_chars = tag_string_chars;
     }
 
-    format(){
+    format() {
         return `${this.link}${this.id}`;
     }
 
-    logData(){
+    logData() {
         console.log(`ID:${this.id}|DATE:${this.datePosted}|ISPENDING:${this.isPending}|ISFLAGGED:${this.isFlagged}|\nTAGSTRING:${this.tag_string}\n|TAGSTRINGCHARS:${this.tag_string_chars}`);
     }
 }
