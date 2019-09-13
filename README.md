@@ -1,8 +1,6 @@
 # dorothy-bot
 
-<img height="200" width="200" src="https://github.com/Vinesma/dorothy-bot/blob/test-branch/Dorothy.png">
-
-NOBODY EXPECTS
+<img height="200" width="220" src="https://github.com/Vinesma/dorothy-bot/blob/test-branch/Dorothy.png">
 
 Personal Discord bot made using Node.js with Discordjs. Not really made for public use.
 
