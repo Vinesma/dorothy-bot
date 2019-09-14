@@ -40,9 +40,9 @@ function fetchVideos(msg) {
             if (ftVideos.length === 0) {
                 console.log('No new videos found...');
             }
- else {
+            else {
                 // Tag me
-                msg.channel.send(msg.author);
+                msg.channel.send(`@${msg.author.username}`);
                 // Send a msg with the videos
                 ftVideos.forEach(video => { msg.channel.send(video.format()); });
                 console.log(`Found and posted ${ftVideos.length} videos`);
