@@ -22,7 +22,7 @@ dorothyBot.on('ready', () => {
 dorothyBot.on('message', message => {
     // Check if the message is a command and not sent by a bot
     if (message.content.startsWith('!') && !message.author.bot) {
-        // Remove '!' and split the arguments
+        // Remove '!' and split the arguments into an array
         const args = message.content.substr(1).split(/ +/);
         // Shift the first item of args (the command) into commandName
         const commandName = args.shift().toLowerCase();
@@ -44,4 +44,4 @@ dorothyBot.login(process.env.BOT_TOKEN);
 
 // FOR DEVELOPMENT npm run dev AND heroku run local
 // REMOVE THE TOKENS before commits
-// SET heroku scale worker=1 after deploy
+// TO DEPLOY npm run deploy

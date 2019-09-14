@@ -5,26 +5,34 @@ const booruImg = require('../config/booruImg.js');
 module.exports = {
     name: 'danbooru',
     description: 'Turns danbooru checking on/off.',
-    // eslint-disable-next-line no-unused-vars
     execute(msg, args) {
-        if (config.isCheckingDB === false) {
-            msg.channel.send('Okay, I will observe danbooru for you...');
-            fetchDB(msg);
-            config.timerDB = setInterval(() => {
-                fetchDB(msg);
-            }, config.intervalDB);
-            config.isCheckingDB = !config.isCheckingDB;
+        if (args.length >= 1 && args.length <= 2) {
+            if (config.isCheckingDB === false) {
+                msg.channel.send('Okay, I will observe danbooru for you...');
+                args = config.formatDB(args);
+                fetchDB(msg, args);
+                config.timerDB = setInterval(() => { fetchDB(msg, args); }, config.intervalDB);
+                config.isCheckingDB = !config.isCheckingDB;
+            }
+            else {
+                msg.channel.send('No more booru checking!');
+                clearInterval(config.timerDB);
+                config.isCheckingDB = !config.isCheckingDB;
+            }
         }
-        else {
+        else if (config.isCheckingDB === true) {
             msg.channel.send('No more booru checking!');
             clearInterval(config.timerDB);
             config.isCheckingDB = !config.isCheckingDB;
         }
+        else {
+            msg.channel.send('This command requires at least one argument but no more than 2');
+        }
     },
 };
 
-function fetchDB(msg) {
-    fetch(config.dbAPI_LINK)
+function fetchDB(msg, args) {
+    fetch(config.dbAPI_LINK + args.join('+'))
         .then(res => res.json())
         .then(data => {
             const dbPostList = [];

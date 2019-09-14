@@ -25,7 +25,7 @@ const setTimerDB = 3600000 * 6;
 exports.intervalDB = setTimerDB;
 exports.curDateDB = new Date().getTime() - setTimerDB;
 exports.dbLink = 'https://danbooru.donmai.us/posts/';
-exports.dbAPI_LINK = `https://danbooru.donmai.us/posts.json?limit=${dbRequests}&tags=girls_und_panzer`;
+exports.dbAPI_LINK = `https://danbooru.donmai.us/posts.json?limit=${dbRequests}&tags=`;
 
 // FUNCTIONS
 // Returns true in item checks
@@ -55,4 +55,17 @@ exports.checkRecent = (elemDate, checkDate) => {
     else {
         return false;
     }
+};
+
+// Formats danbooru arguments (for some reason .filter didn't work lmao)
+exports.formatDB = (extArray) => {
+    const tempArray = [];
+
+    for (let i = 0; i < extArray.length; i++) {
+        if (typeof extArray[i] === 'string') {
+            tempArray.push('~' + extArray[i].toLowerCase());
+        }
+    }
+
+    return tempArray;
 };

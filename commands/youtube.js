@@ -10,9 +10,7 @@ module.exports = {
         if (config.isCheckingYT === false) {
             msg.channel.send('I guess I can get those videos for you...');
             fetchVideos(msg);
-            config.timer = setInterval(() => {
-                fetchVideos(msg);
-            }, config.intervalYT);
+            config.timer = setInterval(() => { fetchVideos(msg); }, config.intervalYT);
             config.isCheckingYT = !config.isCheckingYT;
         }
         else {
