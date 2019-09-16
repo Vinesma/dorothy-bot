@@ -12,7 +12,6 @@ exports.ytTimer = setYTtimer;
 exports.ytFetchOptions = {
     isChecking : false,
     lastCheckTS : new Date().getTime() - setYTtimer,
-    channel : undefined,
 };
 exports.ytLink = 'https://www.youtube.com/watch?v=';
 exports.ytAPI_LINK = `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=UCQBs359lwzyVFtc22LzLjuw&maxResults=${ytRequests}&key=${ytTOKEN}`;

@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
 const fs = require('fs');
-const config = require('./config/config.js');
 
 // Instance a Discord client
 const dorothyBot = new Discord.Client();
+// Retrieve all channels it's on
+const channelCollection = dorothyBot.channels;
 // Retrieve the supported commands
 dorothyBot.commands = new Discord.Collection();
 
@@ -17,28 +18,27 @@ for (const file of commandFiles) {
 // Ready event, fires when the bot is ready
 dorothyBot.on('ready', () => {
     console.log('FINALLY THE DOROTHY RETURNS TO DISCORD!');
-    // Read last session's data - !youtube
-    fs.readFile('./storage/ytFetchOptions.json', (err, jsonData) => {
+    fs.readFile('./storage/ytLastChannel.json', (err, jsonData) => {
         if (!err) {
             try {
-                console.log('\nTrying to read last session\'s data...');
-                config.ytFetchOptions = JSON.parse(jsonData);
-                console.log('!youtube - Success!');
+                // Resumes commands
+                const info = JSON.parse(jsonData);
+                const TextChannel = channelCollection.get(info.channelId);
+                dorothyBot.commands.get(info.cmd).resume(TextChannel);
             }
             catch (error) {
-                console.error(`!youtube - Error parsing: ${error}`);
+                console.log(`Main:PARSE_JSON - ${error}`);
             }
         }
         else {
-            console.error(`!youtube - Error reading data: ${err}`);
-            console.error('Procceed with defaults.');
+            console.log(`Main:READ_FILE - ${err}`);
         }
     });
 });
 
 // Create an event listener for messages
 dorothyBot.on('message', message => {
-    // Check if the message is a command and not sent by a bot
+    // Check if the message is a command
     if (message.content.startsWith('!') && !message.author.bot) {
         // Remove '!' and split the arguments into an array
         const args = message.content.substr(1).split(/ +/);
