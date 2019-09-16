@@ -58,7 +58,7 @@ dorothyBot.on('message', message => {
 });
 
 // Bot login
-dorothyBot.login(process.env.BOT_TOKEN || 'NjE5NjQwNzQzMzQ2MDQ0OTU2.XXLyYw.SiBAReBCP3nFeWFhYXy5VgktXRQ');
+dorothyBot.login(process.env.BOT_TOKEN);
 
 // FOR DEVELOPMENT npm run dev AND heroku run local
 // REMOVE THE TOKENS before commits

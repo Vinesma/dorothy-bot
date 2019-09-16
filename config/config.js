@@ -2,7 +2,7 @@
 // How many requests to return?
 const ytRequests = 8;
 // Set TOKEN
-const ytTOKEN = process.env.YT_TOKEN || 'AIzaSyCunrtdrXqzWnfcMSjZqhNXvDxbd_NyWSw';
+const ytTOKEN = process.env.YT_TOKEN;
 // Filters for youtube
 exports.ytFilterList = ['Dark Souls', 'Chilluminati', 'Pokemon', 'Open TTD'];
 exports.ytTimerObj = undefined;
