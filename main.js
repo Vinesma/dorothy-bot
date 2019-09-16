@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const fs = require('fs');
+const config = require('./config/config.js');
 
 // Instance a Discord client
 const dorothyBot = new Discord.Client();
@@ -16,6 +17,23 @@ for (const file of commandFiles) {
 // Ready event, fires when the bot is ready
 dorothyBot.on('ready', () => {
     console.log('FINALLY THE DOROTHY RETURNS TO DISCORD!');
+    // Read last session's data - !youtube
+    fs.readFile('./storage/ytFetchOptions.json', (err, jsonData) => {
+        if (!err) {
+            try {
+                console.log('\nTrying to read last session\'s data...');
+                config.ytFetchOptions = JSON.parse(jsonData);
+                console.log('!youtube - Success!');
+            }
+            catch (error) {
+                console.error(`!youtube - Error parsing: ${error}`);
+            }
+        }
+        else {
+            console.error(`!youtube - Error reading data: ${err}`);
+            console.error('Procceed with defaults.');
+        }
+    });
 });
 
 // Create an event listener for messages
@@ -40,7 +58,7 @@ dorothyBot.on('message', message => {
 });
 
 // Bot login
-dorothyBot.login(process.env.BOT_TOKEN);
+dorothyBot.login(process.env.BOT_TOKEN || 'NjE5NjQwNzQzMzQ2MDQ0OTU2.XXLyYw.SiBAReBCP3nFeWFhYXy5VgktXRQ');
 
 // FOR DEVELOPMENT npm run dev AND heroku run local
 // REMOVE THE TOKENS before commits

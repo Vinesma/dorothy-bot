@@ -1,7 +1,6 @@
 module.exports = {
     name: 'help',
     description: 'Lists all available commands.',
-    // eslint-disable-next-line no-unused-vars
     execute(msg, args) {
         const data = [];
         const { commands } = msg.client;

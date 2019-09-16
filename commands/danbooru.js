@@ -1,6 +1,6 @@
 const config = require('../config/config.js');
-const fetch = require('node-fetch');
 const booruImg = require('../config/booruImg.js');
+const fetch = require('node-fetch');
 
 module.exports = {
     name: 'danbooru',

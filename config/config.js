@@ -1,18 +1,21 @@
 // YOUTUBE VARS
 // How many requests to return?
-const requests = 8;
+const ytRequests = 8;
 // Set TOKEN
-const ytTOKEN = process.env.YT_TOKEN;
+const ytTOKEN = process.env.YT_TOKEN || 'AIzaSyCunrtdrXqzWnfcMSjZqhNXvDxbd_NyWSw';
 // Filters for youtube
-exports.filterList = ['Dark Souls', 'Chilluminati', 'Pokemon', 'Open TTD'];
-exports.isCheckingYT = false;
-exports.timer = undefined;
+exports.ytFilterList = ['Dark Souls', 'Chilluminati', 'Pokemon', 'Open TTD'];
+exports.ytTimerObj = undefined;
 // 3600000 = hourly
-const setTimerYT = 3600000 * 3;
-exports.intervalYT = setTimerYT;
-exports.curDateYT = new Date().getTime() - setTimerYT;
+const setYTtimer = 3600000 * 3;
+exports.ytTimer = setYTtimer;
+exports.ytFetchOptions = {
+    isChecking : false,
+    lastCheckTS : new Date().getTime() - setYTtimer,
+    channel : undefined,
+};
 exports.ytLink = 'https://www.youtube.com/watch?v=';
-exports.ytAPI_LINK = `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=UCQBs359lwzyVFtc22LzLjuw&maxResults=${requests}&key=${ytTOKEN}`;
+exports.ytAPI_LINK = `https://www.googleapis.com/youtube/v3/activities?part=snippet%2CcontentDetails&channelId=UCQBs359lwzyVFtc22LzLjuw&maxResults=${ytRequests}&key=${ytTOKEN}`;
 
 // DANBOORU VARS
 // How many requests to return?

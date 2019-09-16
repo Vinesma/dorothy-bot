@@ -1,27 +1,32 @@
 const config = require('../config/config.js');
-const fetch = require('node-fetch');
 const Video = require('../config/video.js');
+const fetch = require('node-fetch');
+const fs = require('fs');
+let ch;
 
 module.exports = {
     name: 'youtube',
     description: 'Turns youtube checking on/off.',
     // eslint-disable-next-line no-unused-vars
     execute(msg, args) {
-        if (config.isCheckingYT === false) {
-            msg.channel.send('I guess I can get those videos for you...');
-            fetchVideos(msg);
-            config.timer = setInterval(() => { fetchVideos(msg); }, config.intervalYT);
-            config.isCheckingYT = !config.isCheckingYT;
+        typeof config.ytFetchOptions.channel === 'undefined' ? ch = msg.channel : ch = config.ytFetchOptions.channel ;
+        if (config.ytFetchOptions.isChecking === false) {
+            ch.send('I guess I can get those videos for you...');
+            fetchVideos();
+            config.ytTimerObj = setInterval(() => { fetchVideos(); }, config.ytTimer);
+            config.ytFetchOptions.isChecking = !config.ytFetchOptions.isChecking;
+            config.ytFetchOptions.channel = ch;
         }
         else {
-            msg.channel.send('Roger! No more looking for new videos.');
-            clearInterval(config.timer);
-            config.isCheckingYT = !config.isCheckingYT;
+            ch.send('Roger! No more looking for new videos.');
+            clearInterval(config.ytTimerObj);
+            config.ytFetchOptions.isChecking = !config.ytFetchOptions.isChecking;
+            config.ytFetchOptions.channel = undefined;
         }
     },
 };
 
-function fetchVideos(msg) {
+function fetchVideos() {
     fetch(config.ytAPI_LINK)
         .then(res => res.json())
         .then(data => {
@@ -33,21 +38,26 @@ function fetchVideos(msg) {
                 videoList.push(v);
             });
             // Filter videos by interests
-            let ftVideos = videoList.filter(e => config.filterPositive(e.title, config.filterList));
+            let ftVideos = videoList.filter(e => config.filterPositive(e.title, config.ytFilterList));
             // Check recency
-            ftVideos = ftVideos.filter(e => config.checkRecent(e.datePosted, config.curDateYT));
+            ftVideos = ftVideos.filter(e => config.checkRecent(e.datePosted, config.ytFetchOptions.lastCheckTS));
             // Send videos out
             if (ftVideos.length === 0) {
                 console.log('No new videos found...');
             }
             else {
                 // Tag me
-                msg.channel.send(`@${msg.author.username}`);
+                ch.send('@Vinesma');
                 // Send a msg with the videos
-                ftVideos.forEach(video => { msg.channel.send(video.format()); });
+                ftVideos.forEach(video => { ch.send(video.format()); });
                 console.log(`Found and posted ${ftVideos.length} videos`);
             }
             // Get new time
-            config.curDateYT = new Date().getTime();
+            config.ytFetchOptions.lastCheckTS = new Date().getTime();
+            fs.writeFile('./storage/ytFetchOptions.json', JSON.stringify(config.ytFetchOptions), (err) => {
+                if (typeof err !== 'object') {
+                    console.error(`!youtube - Error while saving config file: ${err}`);
+                }
+            });
         });
 }
